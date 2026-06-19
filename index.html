@@ -1,0 +1,765 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Gestprime — Gestión Financiera para Hostelería</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400&family=Inter:wght@300;400;500;600&display=swap" rel="stylesheet">
+<style>
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+:root {
+  --bg:        #F7F5F0;
+  --bg2:       #EFECE5;
+  --bg3:       #E8E4DB;
+  --white:     #FFFFFF;
+  --forest:    #1B4332;
+  --forest2:   #2D6A4F;
+  --forest3:   #40916C;
+  --amber:     #C4621A;
+  --amber-lt:  #E8923A;
+  --ink:       #0F1A13;
+  --ink2:      #2C3E30;
+  --muted:     #6B7B6E;
+  --border:    #D6D1C8;
+  --border2:   #C2BDB3;
+  --serif:     'Playfair Display', Georgia, serif;
+  --sans:      'Inter', system-ui, sans-serif;
+  --radius:    10px;
+}
+
+html { scroll-behavior: smooth; }
+body { background: var(--bg); color: var(--ink); font-family: var(--sans); font-size: 16px; line-height: 1.6; overflow-x: hidden; }
+
+/* ── NAV ── */
+nav {
+  position: fixed; top: 0; left: 0; right: 0; z-index: 100;
+  display: flex; align-items: center; justify-content: space-between;
+  padding: 1rem 4rem;
+  background: rgba(247,245,240,0.92); backdrop-filter: blur(14px);
+  border-bottom: 1px solid var(--border);
+}
+.logo { display: flex; align-items: center; gap: 10px; text-decoration: none; }
+.logo-icon { display: flex; align-items: center; }
+.logo-svg { width: 38px; height: 38px; }
+.logo-name { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; color: var(--ink); letter-spacing: -0.01em; }
+.logo-name span { color: var(--amber); }
+nav ul { list-style: none; display: flex; gap: 2rem; }
+nav ul a { color: var(--muted); text-decoration: none; font-size: .875rem; font-weight: 400; transition: color .2s; }
+nav ul a:hover { color: var(--ink); }
+.nav-cta {
+  background: var(--forest); color: #fff; padding: .5rem 1.25rem;
+  border-radius: 6px; font-size: .875rem; font-weight: 600;
+  text-decoration: none; transition: background .2s;
+}
+.nav-cta:hover { background: var(--forest2); }
+
+/* ── HERO ── */
+.hero {
+  min-height: 100vh; display: flex; align-items: center;
+  padding: 8rem 4rem 5rem;
+  background:
+    radial-gradient(ellipse 60% 50% at 70% 50%, rgba(27,67,50,0.06) 0%, transparent 70%),
+    var(--bg);
+  position: relative; overflow: hidden;
+}
+.hero::after {
+  content: '';
+  position: absolute; bottom: 0; left: 0; right: 0; height: 1px;
+  background: var(--border);
+}
+.hero-inner { max-width: 1200px; margin: 0 auto; width: 100%; display: grid; grid-template-columns: 1fr 1fr; gap: 5rem; align-items: center; }
+.hero-eyebrow {
+  display: inline-flex; align-items: center; gap: .5rem;
+  font-size: .72rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase;
+  color: var(--forest); margin-bottom: 1.25rem;
+  background: rgba(27,67,50,0.08); padding: .35rem .75rem; border-radius: 99px;
+}
+.hero-eyebrow::before { content: ''; width: 6px; height: 6px; border-radius: 50%; background: var(--forest3); }
+.hero h1 {
+  font-family: var(--serif); font-size: clamp(2.4rem, 3.8vw, 3.4rem);
+  font-weight: 700; line-height: 1.1; letter-spacing: -0.02em;
+  color: var(--ink); margin-bottom: 1.5rem;
+}
+.hero h1 em { font-style: italic; color: var(--forest); }
+.hero-sub { font-size: 1.05rem; color: var(--muted); line-height: 1.75; margin-bottom: 2.5rem; max-width: 480px; }
+.hero-actions { display: flex; gap: 1rem; align-items: center; flex-wrap: wrap; }
+.btn-primary {
+  background: var(--forest); color: #fff; padding: .85rem 1.75rem;
+  border-radius: var(--radius); font-weight: 600; font-size: .95rem;
+  text-decoration: none; border: none; cursor: pointer;
+  transition: background .2s, transform .15s; display: inline-block;
+}
+.btn-primary:hover { background: var(--forest2); transform: translateY(-1px); }
+.btn-ghost {
+  color: var(--ink2); font-size: .9rem; text-decoration: none;
+  border: 1px solid var(--border2); padding: .85rem 1.5rem; border-radius: var(--radius);
+  transition: border-color .2s, color .2s;
+}
+.btn-ghost:hover { border-color: var(--forest); color: var(--forest); }
+
+/* ── HERO CARD ── */
+.hero-card {
+  background: var(--white); border: 1px solid var(--border);
+  border-radius: 16px; padding: 1.75rem;
+  box-shadow: 0 4px 24px rgba(15,26,19,0.07), 0 1px 4px rgba(15,26,19,0.04);
+  position: relative;
+}
+.hero-card::before {
+  content: '';
+  position: absolute; top: 0; left: 1.75rem; right: 1.75rem; height: 2px;
+  background: linear-gradient(90deg, var(--forest) 0%, var(--forest3) 100%);
+  border-radius: 0 0 2px 2px;
+}
+.card-label { font-size: .68rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--muted); margin-bottom: 1.25rem; }
+.metric-row { border-bottom: 1px solid var(--bg2); padding: .85rem 0; display: flex; justify-content: space-between; align-items: baseline; }
+.metric-row:last-of-type { border-bottom: none; }
+.metric-name { font-size: .85rem; color: var(--muted); }
+.metric-val { font-family: var(--serif); font-size: 1.15rem; font-weight: 600; }
+.metric-val.good { color: var(--forest2); }
+.metric-val.warn { color: var(--amber); }
+.metric-val.bad  { color: #B03A2E; }
+.card-footer { margin-top: 1.25rem; padding-top: 1rem; border-top: 1px solid var(--bg2); display: flex; gap: .5rem; align-items: center; }
+.dot { width: 7px; height: 7px; border-radius: 50%; background: var(--forest3); animation: pulse 2.2s ease-in-out infinite; flex-shrink: 0; }
+@keyframes pulse { 0%,100%{ opacity:1; transform:scale(1);} 50%{ opacity:.35; transform:scale(.75);} }
+.card-footer span { font-size: .75rem; color: var(--muted); }
+
+/* ── STATS BAR ── */
+.stats-bar { background: var(--forest); padding: 2.25rem 4rem; }
+.stats-inner { max-width: 1200px; margin: 0 auto; display: grid; grid-template-columns: repeat(4, 1fr); gap: 2rem; }
+.stat { text-align: center; }
+.stat-num { font-family: var(--serif); font-size: 2rem; font-weight: 700; color: #fff; line-height: 1; }
+.stat-num span { color: rgba(255,255,255,0.55); font-size: 1.1rem; }
+.stat-label { font-size: .78rem; color: rgba(255,255,255,0.6); margin-top: .35rem; }
+
+/* ── SECTION BASE ── */
+section { padding: 6rem 4rem; }
+.section-inner { max-width: 1200px; margin: 0 auto; }
+.section-eyebrow { font-size: .7rem; font-weight: 600; letter-spacing: .12em; text-transform: uppercase; color: var(--forest); margin-bottom: .6rem; }
+.section-title { font-family: var(--serif); font-size: clamp(1.75rem, 3vw, 2.5rem); font-weight: 700; line-height: 1.15; letter-spacing: -0.02em; color: var(--ink); margin-bottom: 1rem; }
+.section-sub { font-size: 1rem; color: var(--muted); max-width: 560px; line-height: 1.75; }
+
+/* ── PARA QUIÉN ── */
+.audience-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.audience-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.75rem; border-top: 3px solid var(--forest);
+  transition: box-shadow .2s, transform .2s;
+}
+.audience-card:hover { box-shadow: 0 8px 24px rgba(15,26,19,0.09); transform: translateY(-2px); }
+.audience-icon { font-size: 1.5rem; margin-bottom: 1rem; }
+.audience-card h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: .5rem; }
+.audience-card p { font-size: .875rem; color: var(--muted); line-height: 1.65; }
+
+/* ── SERVICIOS ── */
+.services-alt { background: var(--bg2); }
+.services-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.25rem; margin-top: 3rem; }
+.service-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: var(--radius);
+  padding: 1.75rem; transition: border-color .2s, box-shadow .2s;
+}
+.service-card:hover { border-color: var(--forest3); box-shadow: 0 4px 16px rgba(27,67,50,0.08); }
+.service-tag { font-size: .65rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--forest); background: rgba(27,67,50,0.08); display: inline-block; padding: .2rem .6rem; border-radius: 99px; margin-bottom: 1rem; }
+.service-card h3 { font-family: var(--serif); font-size: 1.1rem; font-weight: 600; color: var(--ink); margin-bottom: .75rem; }
+.service-list { list-style: none; }
+.service-list li { font-size: .84rem; color: var(--muted); padding: .35rem 0; border-bottom: 1px solid var(--bg2); display: flex; gap: .5rem; align-items: flex-start; line-height: 1.5; }
+.service-list li:last-child { border-bottom: none; }
+.service-list li::before { content: '—'; color: var(--forest3); flex-shrink: 0; font-size: .8rem; margin-top: 1px; }
+
+/* ── PROCESO ── */
+.process-grid { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; position: relative; }
+.process-grid::before {
+  content: '';
+  position: absolute; top: 1.5rem; left: calc(12.5% + .5rem); right: calc(12.5% + .5rem);
+  height: 1px; background: var(--border2); z-index: 0;
+}
+.process-card { position: relative; z-index: 1; }
+.process-num {
+  width: 36px; height: 36px; border-radius: 50%; background: var(--forest);
+  color: #fff; font-size: .75rem; font-weight: 600;
+  display: flex; align-items: center; justify-content: center;
+  margin-bottom: 1rem; border: 3px solid var(--bg);
+}
+.process-card h3 { font-size: .95rem; font-weight: 600; color: var(--ink); margin-bottom: .4rem; }
+.process-card p { font-size: .83rem; color: var(--muted); line-height: 1.6; }
+
+/* ── PRICING ── */
+.pricing-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.pricing-card {
+  background: var(--white); border: 1px solid var(--border); border-radius: 14px;
+  padding: 2rem; position: relative; transition: box-shadow .2s;
+}
+.pricing-card:hover { box-shadow: 0 8px 28px rgba(15,26,19,0.1); }
+.pricing-card.featured {
+  border-color: var(--forest); border-width: 2px;
+  box-shadow: 0 8px 32px rgba(27,67,50,0.14);
+}
+.pricing-badge {
+  position: absolute; top: -13px; left: 50%; transform: translateX(-50%);
+  background: var(--forest); color: #fff; font-size: .68rem; font-weight: 600;
+  letter-spacing: .07em; text-transform: uppercase; padding: .3rem .85rem;
+  border-radius: 99px; white-space: nowrap;
+}
+.plan-name { font-size: .7rem; font-weight: 600; letter-spacing: .1em; text-transform: uppercase; color: var(--forest); margin-bottom: .4rem; }
+.plan-price { font-family: var(--serif); font-size: 2.7rem; font-weight: 700; color: var(--ink); line-height: 1; margin-bottom: .2rem; }
+.plan-price sup { font-size: 1.1rem; vertical-align: super; }
+.plan-price sub { font-size: .95rem; font-weight: 400; color: var(--muted); }
+.plan-desc { font-size: .84rem; color: var(--muted); margin: .75rem 0 1.5rem; line-height: 1.55; border-bottom: 1px solid var(--bg2); padding-bottom: 1.25rem; }
+.plan-features { list-style: none; margin-bottom: 1.75rem; }
+.plan-features li { font-size: .84rem; color: var(--ink2); padding: .4rem 0; border-bottom: 1px solid var(--bg2); display: flex; gap: .6rem; align-items: flex-start; line-height: 1.45; }
+.plan-features li:last-child { border-bottom: none; }
+.check { color: var(--forest2); font-size: .8rem; flex-shrink: 0; margin-top: 2px; font-weight: 600; }
+.plan-cta {
+  display: block; text-align: center; padding: .8rem;
+  border: 1.5px solid var(--border2); border-radius: 7px;
+  color: var(--ink2); font-size: .875rem; font-weight: 500;
+  text-decoration: none; transition: all .2s; cursor: pointer;
+  background: none; width: 100%;
+}
+.plan-cta:hover { border-color: var(--forest); color: var(--forest); }
+.pricing-card.featured .plan-cta { background: var(--forest); color: #fff; border-color: var(--forest); font-weight: 600; }
+.pricing-card.featured .plan-cta:hover { background: var(--forest2); border-color: var(--forest2); }
+.pricing-note { text-align: center; margin-top: 1.5rem; font-size: .82rem; color: var(--muted); }
+.pricing-note a { color: var(--forest); text-decoration: none; font-weight: 500; }
+
+/* ── TESTIMONIOS ── */
+.testimonials-grid { display: grid; grid-template-columns: repeat(3, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.testimonial-card { background: var(--white); border: 1px solid var(--border); border-radius: var(--radius); padding: 1.75rem; }
+.testimonial-quote { font-family: var(--serif); font-size: .95rem; color: var(--ink2); line-height: 1.7; margin-bottom: 1.25rem; font-style: italic; }
+.testimonial-quote::before { content: '\201C'; font-size: 1.5rem; color: var(--forest3); line-height: 0; vertical-align: -0.35rem; margin-right: .1rem; }
+.testimonial-author { font-size: .82rem; font-weight: 600; color: var(--ink); }
+.testimonial-role { font-size: .78rem; color: var(--muted); }
+
+/* ── GARANTÍAS ── */
+.guarantees { display: grid; grid-template-columns: repeat(4, 1fr); gap: 1.5rem; margin-top: 3rem; }
+.guarantee { padding: 1.5rem; border-left: 2px solid var(--forest3); }
+.guarantee-icon { font-size: 1.4rem; margin-bottom: .75rem; display: block; }
+.guarantee h4 { font-size: .9rem; font-weight: 600; color: var(--ink); margin-bottom: .35rem; }
+.guarantee p { font-size: .82rem; color: var(--muted); line-height: 1.55; }
+
+/* ── CTA FINAL ── */
+.cta-final {
+  background: var(--forest); text-align: center;
+  padding: 7rem 4rem;
+}
+.cta-final h2 { font-family: var(--serif); font-size: clamp(1.9rem, 3vw, 2.8rem); font-weight: 700; color: #fff; margin-bottom: 1rem; line-height: 1.15; }
+.cta-final h2 em { font-style: italic; color: rgba(255,255,255,0.7); }
+.cta-final p { color: rgba(255,255,255,0.65); margin-bottom: 2.5rem; font-size: 1.05rem; }
+.cta-actions { display: flex; gap: 1rem; justify-content: center; flex-wrap: wrap; }
+.btn-white { background: #fff; color: var(--forest); padding: .9rem 1.9rem; border-radius: var(--radius); font-weight: 600; font-size: .95rem; text-decoration: none; transition: background .2s, transform .15s; }
+.btn-white:hover { background: var(--bg); transform: translateY(-1px); }
+.btn-ghost-white { color: rgba(255,255,255,0.8); font-size: .9rem; text-decoration: none; border: 1.5px solid rgba(255,255,255,0.3); padding: .9rem 1.5rem; border-radius: var(--radius); transition: border-color .2s, color .2s; }
+.btn-ghost-white:hover { border-color: rgba(255,255,255,0.7); color: #fff; }
+
+/* ── FOOTER ── */
+footer { background: var(--bg2); border-top: 1px solid var(--border); padding: 2rem 4rem; display: flex; justify-content: space-between; align-items: center; }
+footer p { font-size: .8rem; color: var(--muted); }
+footer nav ul { gap: 1.5rem; }
+
+/* ── DIVIDER ── */
+.divider-line { border: none; border-top: 1px solid var(--border); margin: 0; }
+
+/* ── TICKER ── */
+.ticker-wrap {
+  background: rgba(27,67,50,0.06); border-top: 1px solid var(--border); border-bottom: 1px solid var(--border);
+  padding: .6rem 0; overflow: hidden; white-space: nowrap;
+  margin-top: 2.5rem;
+}
+.ticker-inner { display: inline-flex; gap: 3rem; animation: ticker 28s linear infinite; }
+.ticker-item { font-size: .75rem; font-weight: 500; color: var(--forest); display: flex; gap: .6rem; align-items: center; }
+.ticker-item .val { color: var(--amber); font-weight: 600; }
+.ticker-sep { color: var(--border2); }
+@keyframes ticker { from { transform: translateX(0); } to { transform: translateX(-50%); } }
+
+/* ── RESPONSIVE ── */
+@media (max-width: 960px) {
+  nav { padding: 1rem 1.5rem; }
+  nav ul { display: none; }
+  section, .hero, .cta-final, footer { padding-left: 1.5rem; padding-right: 1.5rem; }
+  .stats-bar { padding: 2rem 1.5rem; }
+  .hero-inner { grid-template-columns: 1fr; gap: 3rem; }
+  .audience-grid, .services-grid, .pricing-grid, .testimonials-grid, .guarantees, .process-grid { grid-template-columns: 1fr; }
+  .stats-inner { grid-template-columns: repeat(2, 1fr); }
+  .process-grid::before { display: none; }
+  footer { flex-direction: column; gap: 1rem; text-align: center; }
+  footer nav ul { justify-content: center; }
+}
+
+/* ── LOGO ANIMADO ── */
+.logo-anim { cursor: pointer; }
+
+/* Dibujar trazos con stroke-dasharray al cargar */
+.anim-fork-l1, .anim-fork-l2 {
+  stroke-dasharray: 8;
+  stroke-dashoffset: 8;
+  animation: draw-line 0.4s ease forwards;
+}
+.anim-fork-l2 { animation-delay: 0.1s; }
+
+.anim-fork-handle {
+  stroke-dasharray: 20;
+  stroke-dashoffset: 20;
+  animation: draw-line 0.45s ease forwards 0.2s;
+}
+.anim-knife {
+  stroke-dasharray: 28;
+  stroke-dashoffset: 28;
+  animation: draw-line 0.5s ease forwards 0.35s;
+}
+.anim-chart {
+  stroke-dasharray: 30;
+  stroke-dashoffset: 30;
+  animation: draw-line 0.55s ease forwards 0.55s;
+}
+.anim-dot {
+  opacity: 0;
+  transform-origin: 31px 17px;
+  transform: scale(0);
+  animation: pop-dot 0.3s cubic-bezier(0.34,1.56,0.64,1) forwards 1.05s;
+}
+
+@keyframes draw-line {
+  to { stroke-dashoffset: 0; }
+}
+@keyframes pop-dot {
+  to { opacity: 1; transform: scale(1); }
+}
+
+/* Hover: el punto ámbar pulsa y la línea de tendencia brilla */
+.logo-anim:hover .anim-dot {
+  animation: pulse-dot 1s ease-in-out infinite;
+}
+.logo-anim:hover .anim-chart {
+  stroke: #E8923A;
+  transition: stroke 0.3s;
+}
+@keyframes pulse-dot {
+  0%, 100% { r: 1.4px; opacity: 1; }
+  50%       { r: 2.4px; opacity: 0.7; }
+}
+
+/* Hover suave en el icono completo */
+.logo:hover .logo-anim rect {
+  transition: fill 0.25s;
+  fill: #2D6A4F;
+}
+
+</style>
+</head>
+<body>
+
+<!-- NAV -->
+<nav>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg class="logo-svg logo-anim" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="38" height="38" rx="8" fill="#1B4332"/>
+        <!-- Tenedor: líneas verticales -->
+        <line class="anim-fork-l1" x1="10" y1="9" x2="10" y2="16" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+        <line class="anim-fork-l2" x1="13" y1="9" x2="13" y2="16" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+        <!-- Tenedor: mango -->
+        <path class="anim-fork-handle" d="M10 16 Q11.5 19 11.5 22 L11.5 29" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round" fill="none"/>
+        <!-- Cuchillo -->
+        <path class="anim-knife" d="M17 9 L17 17 Q17 20 19 20 L19 29" stroke="#C4621A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+        <!-- Línea de tendencia -->
+        <polyline class="anim-chart" points="22,27 25,22 28,24 31,17" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>
+        <!-- Punto ámbar animado -->
+        <circle class="anim-dot" cx="31" cy="17" r="1.4" fill="#C4621A"/>
+      </svg>
+    </div>
+    <span class="logo-name">Gestprime<span>.</span></span>
+  </a>
+  <ul>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#como-funciona">Cómo funciona</a></li>
+    <li><a href="#tarifas">Tarifas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul>
+  <a href="#tarifas" class="nav-cta">Ver tarifas</a>
+</nav>
+
+<!-- HERO -->
+<section class="hero">
+  <div class="hero-inner">
+    <div>
+      <p class="hero-eyebrow">Gestión financiera especializada en hostelería</p>
+      <h1>Tu negocio merece un CFO que habla <em>hostelería.</em></h1>
+      <p class="hero-sub">Control financiero, fiscal y operativo diseñado para grupos de restauración. Sin curva de aprendizaje: sabemos cómo funciona tu sector porque lo vivimos desde dentro.</p>
+      <div class="hero-actions">
+        <a href="#tarifas" class="btn-primary">Ver planes desde 149 €/mes</a>
+        <a href="#como-funciona" class="btn-ghost">Cómo funciona →</a>
+      </div>
+    </div>
+    <div>
+      <div class="hero-card">
+        <p class="card-label">Diagnóstico en tiempo real — restaurante tipo</p>
+        <div class="metric-row">
+          <span class="metric-name">Food cost actual</span>
+          <span class="metric-val warn">34,2%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">Food cost óptimo sector</span>
+          <span class="metric-val good">28–30%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">Coste de personal / ventas</span>
+          <span class="metric-val warn">38,5%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">EBITDA estimado</span>
+          <span class="metric-val bad">8,1%</span>
+        </div>
+        <div class="metric-row">
+          <span class="metric-name">EBITDA objetivo sector</span>
+          <span class="metric-val good">14–18%</span>
+        </div>
+        <div class="card-footer">
+          <div class="dot"></div>
+          <span>Análisis activo · 3 palancas de mejora detectadas</span>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <!-- TICKER -->
+  <div class="ticker-wrap" style="position:absolute; bottom:0; left:0; right:0; margin:0;">
+    <div class="ticker-inner">
+      <span class="ticker-item">Food cost óptimo <span class="val">28–30%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">EBITDA hostelería media España <span class="val">11,4%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Coste personal recomendado <span class="val">&lt;35%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Royalty franquicia medio <span class="val">5–8%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Tasa TPV negociable <span class="val">0,28–0,35%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Beverage cost óptimo <span class="val">20–25%</span></span>
+      <span class="ticker-sep">·</span>
+      <!-- duplicate for seamless loop -->
+      <span class="ticker-item">Food cost óptimo <span class="val">28–30%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">EBITDA hostelería media España <span class="val">11,4%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Coste personal recomendado <span class="val">&lt;35%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Royalty franquicia medio <span class="val">5–8%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Tasa TPV negociable <span class="val">0,28–0,35%</span></span>
+      <span class="ticker-sep">·</span>
+      <span class="ticker-item">Beverage cost óptimo <span class="val">20–25%</span></span>
+      <span class="ticker-sep">·</span>
+    </div>
+  </div>
+</section>
+
+<!-- STATS BAR -->
+<div class="stats-bar">
+  <div class="stats-inner">
+    <div class="stat"><div class="stat-num">+200</div><div class="stat-label">locales analizados en España</div></div>
+    <div class="stat"><div class="stat-num">15 <span>años</span></div><div class="stat-label">de experiencia en operativa hostelera</div></div>
+    <div class="stat"><div class="stat-num">&lt;24h</div><div class="stat-label">tiempo de respuesta garantizado</div></div>
+    <div class="stat"><div class="stat-num">–50%</div><div class="stat-label">frente a la gestoría generalista</div></div>
+  </div>
+</div>
+
+<!-- PARA QUIÉN -->
+<section id="para-quien">
+  <div class="section-inner">
+    <p class="section-eyebrow">Para quién</p>
+    <h2 class="section-title">Diseñado para quien opera, no para quien teoriza.</h2>
+    <p class="section-sub">Si gestionas más de un local, tienes una franquicia o estás en proceso de expansión, Gestprime es tu equipo financiero externo.</p>
+    <div class="audience-grid">
+      <div class="audience-card">
+        <div class="audience-icon">🍽️</div>
+        <h3>Grupos multimarca</h3>
+        <p>Gestión consolidada de varias marcas y sociedades. Control intercompany, pools bancarios y presentación ante inversores o entidades financieras.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🏪</div>
+        <h3>Franquiciados en expansión</h3>
+        <p>Apertura de nuevos locales, financiación de obras, revisión de addendas y negociación directa con la central franquiciadora.</p>
+      </div>
+      <div class="audience-card">
+        <div class="audience-icon">🍔</div>
+        <h3>Operadores independientes</h3>
+        <p>Un solo local que necesita control real de márgenes, costes de personal y relación con proveedores — sin pagar como una corporación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider-line">
+
+<!-- SERVICIOS -->
+<section id="servicios" class="services-alt">
+  <div class="section-inner">
+    <p class="section-eyebrow">Servicios</p>
+    <h2 class="section-title">Todo lo que necesitas. Nada que no uses.</h2>
+    <p class="section-sub">Cada servicio está calibrado para la realidad del negocio hostelero: márgenes ajustados, alta rotación y estacionalidad.</p>
+    <div class="services-grid">
+      <div class="service-card">
+        <span class="service-tag">Financiero</span>
+        <h3>Control de gestión</h3>
+        <ul class="service-list">
+          <li>P&L mensual por local y consolidado</li>
+          <li>Control de food cost y beverage cost</li>
+          <li>Análisis de coste de personal</li>
+          <li>EBITDA y KPIs operativos</li>
+          <li>Dashboard financiero en tiempo real</li>
+          <li>Presupuestos y análisis de desvíos</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">Bancario</span>
+        <h3>Financiación y banca</h3>
+        <ul class="service-list">
+          <li>Negociación de condiciones bancarias</li>
+          <li>Gestión del pool bancario</li>
+          <li>Financiación de obra y fit-out</li>
+          <li>Avales y líneas de circulante</li>
+          <li>Negociación de TPV y tasas de cobro</li>
+          <li>Presentación ante entidades financieras</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">Franquicias</span>
+        <h3>Operativa franquiciada</h3>
+        <ul class="service-list">
+          <li>Revisión de contratos de franquicia</li>
+          <li>Negociación de addendas económicas</li>
+          <li>Gestión de traspasos de local</li>
+          <li>Análisis de royalties y canon</li>
+          <li>Apertura y viabilidad de nuevas unidades</li>
+          <li>Interlocución con la central</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">Fiscal</span>
+        <h3>Fiscalidad hostelera</h3>
+        <ul class="service-list">
+          <li>IVA reducido y tipos especiales</li>
+          <li>Impuesto de Sociedades</li>
+          <li>Operaciones vinculadas (art. 18 LIS)</li>
+          <li>Estructura holding multisociedad</li>
+          <li>Modelo 232 y precios de transferencia</li>
+          <li>Inspecciones y regularizaciones</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">Proveedores</span>
+        <h3>Contratos de suministro</h3>
+        <ul class="service-list">
+          <li>Análisis de descuentos y rappels</li>
+          <li>Modelos de financiación de proveedor</li>
+          <li>Negociación de exclusividades</li>
+          <li>Cálculo de coste efectivo real</li>
+          <li>Contratos DAMM, Mahou, Coca-Cola</li>
+          <li>Revisión de cláusulas de penalización</li>
+        </ul>
+      </div>
+      <div class="service-card">
+        <span class="service-tag">Legal</span>
+        <h3>Asesoría legal sectorial</h3>
+        <ul class="service-list">
+          <li>Arrendamientos de local de negocio</li>
+          <li>Contratos laborales en hostelería</li>
+          <li>Fijos discontinuos y pluriempleo</li>
+          <li>Licencias de actividad</li>
+          <li>ERTEs y expedientes de regulación</li>
+          <li>Constitución y estructura societaria</li>
+        </ul>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CÓMO FUNCIONA -->
+<section id="como-funciona">
+  <div class="section-inner">
+    <p class="section-eyebrow">El proceso</p>
+    <h2 class="section-title">De la consulta a la solución en menos de 24 horas.</h2>
+    <p class="section-sub">Sin reuniones innecesarias. Sin esperas de semanas. Sin facturas sorpresa.</p>
+    <div class="process-grid">
+      <div class="process-card">
+        <div class="process-num">01</div>
+        <h3>Nos planteas el caso</h3>
+        <p>Por WhatsApp, email o web. Sin formularios complicados: cuéntanoslo como lo harías con un colega de confianza.</p>
+      </div>
+      <div class="process-card">
+        <div class="process-num">02</div>
+        <h3>Análisis con IA sectorial</h3>
+        <p>Nuestros agentes procesan la consulta aplicando base de conocimiento hostelera: normativa, benchmarks y precedentes del sector.</p>
+      </div>
+      <div class="process-card">
+        <div class="process-num">03</div>
+        <h3>Validación experta</h3>
+        <p>Un CFO con 15 años en restauración revisa y ajusta cada respuesta antes de enviártela. Criterio real, no solo algoritmo.</p>
+      </div>
+      <div class="process-card">
+        <div class="process-num">04</div>
+        <h3>Solución accionable</h3>
+        <p>Recibes los pasos exactos a seguir, los asientos si es contable, el argumento si es una negociación.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<hr class="divider-line">
+
+<!-- PRICING -->
+<section id="tarifas" class="services-alt">
+  <div class="section-inner">
+    <p class="section-eyebrow">Tarifas</p>
+    <h2 class="section-title">Precio cerrado desde el primer día.</h2>
+    <p class="section-sub">Sin horas variables. Sin sorpresas a fin de mes. Elige el plan que encaja con tu operativa actual.</p>
+    <div class="pricing-grid">
+
+      <div class="pricing-card">
+        <p class="plan-name">Local</p>
+        <div class="plan-price"><sup>€</sup>149<sub>/mes</sub></div>
+        <p class="plan-desc">Para operadores de 1 a 2 locales que necesitan control financiero sin estructurar un equipo interno.</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span>P&L mensual (hasta 2 locales)</li>
+          <li><span class="check">✓</span>10 consultas/mes por WhatsApp o email</li>
+          <li><span class="check">✓</span>Control de food cost y personal</li>
+          <li><span class="check">✓</span>IVA y obligaciones fiscales básicas</li>
+          <li><span class="check">✓</span>Acceso al dashboard de KPIs</li>
+          <li><span class="check">✓</span>Respuesta garantizada en &lt;48h</li>
+        </ul>
+        <a href="#contacto" class="plan-cta">Empezar</a>
+      </div>
+
+      <div class="pricing-card featured">
+        <div class="pricing-badge">Más popular</div>
+        <p class="plan-name">Grupo</p>
+        <div class="plan-price"><sup>€</sup>349<sub>/mes</sub></div>
+        <p class="plan-desc">Para grupos de 3 a 8 locales con estructura multisociedad, franquicias activas o expansión en curso.</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span>P&L consolidado (hasta 8 locales)</li>
+          <li><span class="check">✓</span>Consultas ilimitadas</li>
+          <li><span class="check">✓</span>Control bancario y pool de financiación</li>
+          <li><span class="check">✓</span>Revisión de contratos de franquicia</li>
+          <li><span class="check">✓</span>Negociación con proveedores incluida</li>
+          <li><span class="check">✓</span>Operaciones vinculadas y art. 18 LIS</li>
+          <li><span class="check">✓</span>Respuesta garantizada en &lt;24h</li>
+          <li><span class="check">✓</span>Reunión mensual de seguimiento</li>
+        </ul>
+        <a href="#contacto" class="plan-cta">Empezar</a>
+      </div>
+
+      <div class="pricing-card">
+        <p class="plan-name">Corporativo</p>
+        <div class="plan-price" style="font-size:2rem;">A medida</div>
+        <p class="plan-desc">Para grupos con más de 8 locales, holding multisociedad compleja o necesidades de M&A y due diligence.</p>
+        <ul class="plan-features">
+          <li><span class="check">✓</span>Locales ilimitados</li>
+          <li><span class="check">✓</span>CFO dedicado con acceso directo</li>
+          <li><span class="check">✓</span>Due diligence y operaciones societarias</li>
+          <li><span class="check">✓</span>Presentación ante inversores y bancos</li>
+          <li><span class="check">✓</span>Modelo financiero completo del grupo</li>
+          <li><span class="check">✓</span>Integración con ContaSOL / A3 / Holded</li>
+          <li><span class="check">✓</span>SLA y disponibilidad personalizada</li>
+          <li><span class="check">✓</span>Soporte legal mercantil y laboral</li>
+        </ul>
+        <a href="#contacto" class="plan-cta">Hablemos</a>
+      </div>
+
+    </div>
+    <p class="pricing-note">Todos los planes incluyen <strong>30 días de prueba sin compromiso</strong>. ¿Necesitas algo específico? <a href="#contacto">Cuéntanoslo.</a></p>
+  </div>
+</section>
+
+<!-- TESTIMONIOS -->
+<section>
+  <div class="section-inner">
+    <p class="section-eyebrow">Clientes</p>
+    <h2 class="section-title">Hablan quienes lo usan.</h2>
+    <div class="testimonials-grid">
+      <div class="testimonial-card">
+        <p class="testimonial-quote">Llevábamos años con una gestoría que no entendía nuestra estructura de franquicias. En dos semanas con Gestprime teníamos el consolidado claro y la negociación bancaria relanzada.</p>
+        <p class="testimonial-author">Martín Aznar</p>
+        <p class="testimonial-role">CEO · Grupo de 5 locales KFC, Valencia</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">La negociación del contrato de bebidas la habíamos pospuesto dos años. En 24 horas teníamos el modelo con escenarios. Ahorramos más de 18.000 € al año en coste de suministro.</p>
+        <p class="testimonial-author">Nuria Camps</p>
+        <p class="testimonial-role">Directora de operaciones · Cadena de coctelería, Barcelona</p>
+      </div>
+      <div class="testimonial-card">
+        <p class="testimonial-quote">Por fin alguien que cuando dices food cost o royalty de franquicia sabe de qué hablas sin que tengas que explicárselo. Eso vale mucho cuando el tiempo escasea.</p>
+        <p class="testimonial-author">Roberto Iglesias</p>
+        <p class="testimonial-role">Propietario · 3 locales Udon, Madrid</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- GARANTÍAS -->
+<section class="services-alt">
+  <div class="section-inner">
+    <p class="section-eyebrow">Garantías</p>
+    <h2 class="section-title">Compromisos que ponemos por escrito.</h2>
+    <div class="guarantees">
+      <div class="guarantee">
+        <span class="guarantee-icon">⚡</span>
+        <h4>Respuesta en &lt;24h</h4>
+        <p>Garantizado en el contrato. Si no respondemos en plazo, te descontamos el mes.</p>
+      </div>
+      <div class="guarantee">
+        <span class="guarantee-icon">🔒</span>
+        <h4>Confidencialidad total</h4>
+        <p>Tus datos financieros nunca salen de un entorno cifrado y protegido bajo NDA.</p>
+      </div>
+      <div class="guarantee">
+        <span class="guarantee-icon">📋</span>
+        <h4>Precio cerrado</h4>
+        <p>Lo que acuerdas al inicio es lo que pagas. Sin horas adicionales ni sorpresas.</p>
+      </div>
+      <div class="guarantee">
+        <span class="guarantee-icon">🎯</span>
+        <h4>30 días de prueba</h4>
+        <p>Sin permanencia. Si en 30 días no ves el valor, reembolsamos sin preguntas.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CTA FINAL -->
+<div class="cta-final" id="contacto">
+  <h2>¿Listo para tener un CFO que <em>entiende tu cocina?</em></h2>
+  <p>Primera consulta gratuita. Sin compromiso. Sin formularios interminables.</p>
+  <div class="cta-actions">
+    <a href="mailto:info@gestprime.com" class="btn-white">Escribir a info@gestprime.com</a>
+    <a href="https://wa.me/34600000000" class="btn-ghost-white">WhatsApp directo →</a>
+  </div>
+</div>
+
+<!-- FOOTER -->
+<footer>
+  <a href="#" class="logo">
+    <div class="logo-icon">
+      <svg class="logo-svg" style="width:28px;height:28px;" viewBox="0 0 38 38" fill="none" xmlns="http://www.w3.org/2000/svg">
+        <rect width="38" height="38" rx="8" fill="#1B4332"/>
+        <line x1="10" y1="9" x2="10" y2="16" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+        <line x1="13" y1="9" x2="13" y2="16" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M10 16 Q11.5 19 11.5 22 L11.5 29" stroke="#FFFFFF" stroke-width="1.5" stroke-linecap="round"/>
+        <path d="M17 9 L17 17 Q17 20 19 20 L19 29" stroke="#C4621A" stroke-width="1.5" stroke-linecap="round" stroke-linejoin="round"/>
+        <polyline points="22,27 25,22 28,24 31,17" stroke="#FFFFFF" stroke-width="1.6" stroke-linecap="round" stroke-linejoin="round" fill="none" opacity="0.85"/>
+        <circle cx="31" cy="17" r="1.4" fill="#C4621A"/>
+      </svg>
+    </div>
+    <span class="logo-name" style="font-size:1rem;">Gestprime<span>.</span></span>
+  </a>
+  <p>© 2026 Gestprime. Gestión financiera especializada en hostelería.</p>
+  <nav><ul>
+    <li><a href="#servicios">Servicios</a></li>
+    <li><a href="#tarifas">Tarifas</a></li>
+    <li><a href="#contacto">Contacto</a></li>
+  </ul></nav>
+</footer>
+
+
+</body>
+</html>
